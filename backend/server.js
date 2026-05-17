@@ -20,6 +20,9 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/smart-trip-
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/trips', require('./routes/tripRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
+app.use('/api/transport', require('./routes/transportRoutes'));
+app.use('/api/chat', require('./routes/chatRoutes'));
+app.use('/api/hotels', require('./routes/hotelRoutes'));
 
 // Basic Error Handling
 app.use((err, req, res, next) => {

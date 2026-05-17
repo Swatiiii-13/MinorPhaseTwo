@@ -1,4 +1,6 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Trip = require('../models/Trip');
+
 
 // Initialize the Gemini AI using the API key from environment variables
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -75,6 +77,42 @@ Ensure that the itinerary array has exactly ${duration} items (one for each day)
   }
 };
 
+const saveTrip = async (req, res) => {
+  try {
+    const { destination, duration, budget, itineraryData } = req.body;
+
+    if (!destination || !duration || !budget || !itineraryData) {
+      return res.status(400).json({ message: 'Missing required fields for saving trip' });
+    }
+
+    const trip = new Trip({
+      user: req.user.id,
+      destination,
+      duration,
+      budget,
+      itineraryData,
+    });
+
+    const savedTrip = await trip.save();
+    res.status(201).json(savedTrip);
+  } catch (error) {
+    console.error('Error saving trip:', error);
+    res.status(500).json({ message: 'Failed to save trip to history' });
+  }
+};
+
+const getTravelHistory = async (req, res) => {
+  try {
+    const trips = await Trip.find({ user: req.user.id }).sort({ createdAt: -1 });
+    res.status(200).json(trips);
+  } catch (error) {
+    console.error('Error fetching travel history:', error);
+    res.status(500).json({ message: 'Failed to fetch travel history' });
+  }
+};
+
 module.exports = {
   generateItinerary,
+  saveTrip,
+  getTravelHistory,
 };

@@ -4,6 +4,7 @@ import { AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Checkout from './pages/Checkout';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -25,6 +26,14 @@ function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/checkout" 
+          element={
+            <PrivateRoute>
+              <Checkout />
             </PrivateRoute>
           } 
         />
